@@ -126,6 +126,7 @@ public static class PrinterProbe
     public static async Task<IReadOnlyList<ProbeResult>> ProbeAllAsync(
         TimeSpan? perPortTimeout = null, CancellationToken ct = default)
     {
+        // TODO: Handle both types of transport
         var results = new List<ProbeResult>();
         foreach (var port in SerialPortEnumerator.Enumerate())
         {
