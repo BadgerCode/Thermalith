@@ -10,6 +10,7 @@
     <PackageVersion Include="Avalonia.Fonts.Inter" Version="11.3.13" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.13" />
     <PackageVersion Include="Linux.Bluetooth" Version="5.67.1" />
+    <PackageVersion Include="Tmds.DBus" Version="0.95.1" />
   </ItemGroup>
   <ItemGroup Label="MVVM">
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
