@@ -15,6 +15,7 @@ public sealed class FontService : IDisposable
     public const string BundledFamily = "Roboto";
 
     private readonly SKTypeface _bundled;
+    private readonly SKTypeface? _emojiFace;
     private readonly Dictionary<(string Family, bool Bold, bool Italic), SKTypeface> _cache = new();
     private readonly Dictionary<int, SKTypeface?> _glyphFallback = new();
 
@@ -26,6 +27,8 @@ public sealed class FontService : IDisposable
             ?? throw new InvalidOperationException($"Embedded font resource '{name}' not found.");
         _bundled = SKTypeface.FromStream(stream)
             ?? throw new InvalidOperationException("Bundled fallback font failed to load.");
+
+        _emojiFace = SKTypeface.FromFile("/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf");
     }
 
     /// <summary>True if a real (non-fallback) typeface for <paramref name="family"/> is available on this host.</summary>
@@ -43,6 +46,13 @@ public sealed class FontService : IDisposable
     public SKTypeface? FallbackForCodepoint(int codepoint)
     {
         if (_glyphFallback.TryGetValue(codepoint, out var hit)) return hit;
+
+        if (_emojiFace != null && _emojiFace.ContainsGlyph(codepoint))
+        {
+            _glyphFallback[codepoint] = _emojiFace;
+            return _emojiFace;
+        }
+
         var tf = SKFontManager.Default.MatchCharacter(codepoint);
         _glyphFallback[codepoint] = tf;
         return tf;
