@@ -131,7 +131,7 @@ public sealed class LabelRenderer
             Typeface = tf,
             FakeBoldText = t.Style.Bold && !TypefaceIsBold(tf),
             TextSkewX = t.Style.Italic && !tf.IsItalic ? -0.22f : 0f,
-            SubpixelText = false,
+            SubpixelText = false
         };
         var letterSpacingPx = (float)(t.Style.LetterSpacing * dpi / 72.0);
 
