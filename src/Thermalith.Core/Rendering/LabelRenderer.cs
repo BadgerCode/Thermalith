@@ -1,8 +1,6 @@
-using HarfBuzzSharp;
+using System.Text;
 using Niimbot.Net.Encoding;
 using SkiaSharp;
-using SkiaSharp.HarfBuzz;
-using System.Text;
 using Thermalith.Core.Fonts;
 using Thermalith.Core.Model;
 
@@ -131,7 +129,7 @@ public sealed class LabelRenderer
             Typeface = tf,
             FakeBoldText = t.Style.Bold && !TypefaceIsBold(tf),
             TextSkewX = t.Style.Italic && !tf.IsItalic ? -0.22f : 0f,
-            SubpixelText = false
+            SubpixelText = false,
         };
         var letterSpacingPx = (float)(t.Style.LetterSpacing * dpi / 72.0);
 
@@ -344,11 +342,10 @@ public sealed class LabelRenderer
         var cursor = x;
         foreach (var (text, tf) in SplitRuns(line, primary))
         {
-            using var shaper = new SKShaper(tf);
             paint.Typeface = tf;
             if (letterSpacing == 0f)
             {
-                canvas.DrawShapedText(shaper, text, cursor, baseline, paint);
+                canvas.DrawText(text, cursor, baseline, paint);
                 cursor += paint.MeasureText(text);
             }
             else
@@ -356,7 +353,7 @@ public sealed class LabelRenderer
                 foreach (var ch in text)
                 {
                     var s = ch.ToString();
-                    canvas.DrawShapedText(shaper, s, cursor, baseline, paint);
+                    canvas.DrawText(s, cursor, baseline, paint);
                     cursor += paint.MeasureText(s) + letterSpacing;
                 }
             }
